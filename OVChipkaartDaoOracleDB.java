@@ -75,7 +75,7 @@ public class OVChipkaartDaoOracleDB extends OracleBaseDAO implements OVChipkaart
 
     @Override
     public OVChipkaart save(OVChipkaart ovChipkaart) throws SQLException {
-        Connection connection = getConnection();
+        Connection connection = super.getConnection();
 
         String query = "INSERT INTO OV_CHIPKAART (KAARTNUMMER, GELDIGTOT, KLASSE, SALDO, REIZIGERID) VALUES ( ?, ?, ?, ?, ?)";
 

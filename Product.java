@@ -1,14 +1,14 @@
 package DP_P3;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Product {
     private int productNummer;
     private String productNaam;
     private String beschrijving;
     private double prijs;
-    private OVChipkaart ovChipkaart;
-    private ArrayList<OVChipkaart> ovChipkaarten = new ArrayList<>();
+    private List<OVChipkaart> ovChipkaarten = new ArrayList<OVChipkaart>();
 
     public Product(int pn, String pnaam, String bv, double pr)  {
         this.productNummer = pn;
@@ -50,12 +50,15 @@ public class Product {
         this.prijs = prijs;
     }
 
-    public OVChipkaart getOvChipkaart() {
-        return this.ovChipkaart;
+    public List<OVChipkaart> getMijnChipkaarten() { return ovChipkaarten; }
+
+    public void setOvChipkaarten(List<OVChipkaart> ovChipkaarten) {
+        this.ovChipkaarten = ovChipkaarten;
     }
 
+    @Override
     public String toString() {
-        return "'";
+        return "    Product [product Nummer= " + productNummer + ", Product Naam = " + productNaam + ", beschrijving = " + beschrijving + ", prijs " + prijs + ", OvChipkaarten : " + ovChipkaarten + "]";
     }
 
 
