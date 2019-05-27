@@ -93,20 +93,16 @@ public class ReizigerDaoOracleDB extends OracleBaseDAO implements ReizigerDao {
     @Override
     public Reiziger save(Reiziger reiziger) {
 
-        Connection connection = super.getConnection();
-
-        int id = reiziger.getId();
-        String vrltr = reiziger.getVoorletters();
-        String nm = reiziger.getActhernaam();
-        String tv = reiziger.getTussenvoegsel();
-        Date gb = reiziger.getGBdatum();
-
-        String query = "INSERT INTO reiziger (REIZIGERID, VOORLETTERS, ACHTERNAAM, GEBORTEDATUM)";
-        String add = query + "(" + id + ", " + vrltr + ", " + nm + ", " + gb + ")";
+        String query = "INSERT INTO reiziger (REIZIGERID, VOORLETTERS, TUSSENVOEGSEL, ACHTERNAAM, GEBORTEDATUM)" + " VALUES (?,?,?,?,?)";
 
         try {
-            PreparedStatement  statement = connection.prepareStatement(add);
-            statement.executeUpdate();
+            PreparedStatement preparedStatement = this.getConnection().prepareStatement(query);
+            preparedStatement.setInt(1, reiziger.getId());
+            preparedStatement.setString(2, reiziger.getVoorletters());
+            preparedStatement.setString(3, reiziger.getTussenvoegsel());
+            preparedStatement.setString(4, reiziger.getActhernaam());
+            preparedStatement.setDate(5, reiziger.getGBdatum());
+            preparedStatement.executeUpdate();
 
         }
         catch (SQLException e) {
