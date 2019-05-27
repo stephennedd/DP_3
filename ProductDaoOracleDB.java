@@ -19,7 +19,7 @@ public class ProductDaoOracleDB extends OracleBaseDAO implements ProductDao {
     public ArrayList<Product> findAll() {
 
         Connection connection = super.getConnection();
-        ArrayList<Product> products = new ArrayList<>();
+        ArrayList<Product> producten = new ArrayList<>();
 
         try {
 
@@ -28,9 +28,9 @@ public class ProductDaoOracleDB extends OracleBaseDAO implements ProductDao {
             ResultSet resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
-                products.add(toProduct(resultSet));
+                producten.add(toProduct(resultSet));
             }
-            return products;
+            return producten;
         } catch (SQLException e) {
             e.printStackTrace();
         }
