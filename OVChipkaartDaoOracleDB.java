@@ -32,6 +32,7 @@ public class OVChipkaartDaoOracleDB extends OracleBaseDAO implements OVChipkaart
     @Override
     public List<OVChipkaart> findAll() {
         ArrayList<OVChipkaart> ovChipkaarten = new ArrayList<>();
+        ArrayList<Reiziger> reizigers = new ArrayList<>();
 
         try {
             String query = "SELECT * FROM OV_CHIPKAART";
@@ -41,12 +42,8 @@ public class OVChipkaartDaoOracleDB extends OracleBaseDAO implements OVChipkaart
             while (rs.next()) {
                 ovChipkaarten.add(toOVC(rs));
 
-                query = "SELECT * FROM REIZIGER WHERE REIZIGERID = ?";
-                PreparedStatement stmt = this.getConnection().prepareStatement(query);
-                stmt.setInt(1, rs.getInt("REIZIGERID"));
-                ResultSet resultSet = stmt.executeQuery();
-                while (resultSet.next()){
-                    Reiziger r = toReiziger(resultSet);
+                for (Reiziger r : new ReizigerDaoOracleDB().findAll()) {
+                    reizigers.add(r);
                     for(OVChipkaart kaart : new OVChipkaartDaoOracleDB().findByReiziger(r)){
                         r.addOvChipkaart(kaart);
                     }
