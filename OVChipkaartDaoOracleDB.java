@@ -6,11 +6,32 @@ import java.util.List;
 
 public class OVChipkaartDaoOracleDB extends OracleBaseDAO implements OVChipkaartDao {
 
+    private OVChipkaart toOVC(ResultSet resultSet) throws SQLException {
+        OVChipkaart ovChipkaart = new OVChipkaart(
+                resultSet.getInt("KAARTNUMMER"),
+                resultSet.getDate("GELDIGTOT"),
+                resultSet.getInt("KLASSE"),
+                resultSet.getDouble("SALDO"),
+                resultSet.getInt("REIZIGERID")
+        );
+        return ovChipkaart;
+    }
+
+    private Reiziger toReiziger(ResultSet resultSet) throws SQLException {
+        Reiziger reiziger = new Reiziger(
+                resultSet.getInt("REIZIGERID"),
+                resultSet.getString("VOORLETTERS"),
+                resultSet.getString("TUSSENVOEGSEL"),
+                resultSet.getString("ACHTERNAAM"),
+                resultSet.getDate("GEBOORTEDATUM")
+        );
+        return reiziger;
+    }
+
+
     @Override
     public List<OVChipkaart> findAll() {
-        Connection connection = super.getConnection();
         ArrayList<OVChipkaart> ovChipkaarten = new ArrayList<>();
-
 
         try {
             String query = "SELECT * FROM OV_CHIPKAART";
@@ -18,23 +39,17 @@ public class OVChipkaartDaoOracleDB extends OracleBaseDAO implements OVChipkaart
             ResultSet rs = statement.executeQuery(query);
 
             while (rs.next()) {
-                OVChipkaart ov = new OVChipkaart();
-                ov.setKaartNummer(rs.getInt("KAARTNUMMER"));
-                ov.setKlasse(rs.getInt("KLASSE"));
-                ov.setGeldigTot(rs.getDate("GELDIGTOT"));
-                ov.setSaldo(rs.getDouble("SALDO"));
-                ovChipkaarten.add((ov));
+                ovChipkaarten.add(toOVC(rs));
 
                 query = "SELECT * FROM REIZIGER WHERE REIZIGERID = ?";
                 PreparedStatement stmt = this.getConnection().prepareStatement(query);
                 stmt.setInt(1, rs.getInt("REIZIGERID"));
                 ResultSet resultSet = stmt.executeQuery();
                 while (resultSet.next()){
-                    Reiziger r = new Reiziger();
-                    r.setId(resultSet.getInt("REIZIGERID"));
-                    r.setVoorletters(resultSet.getString("VOORLETTERS"));
-                    r.setTussenvoegsel(resultSet.getString("TUSSEN"));
-
+                    Reiziger r = toReiziger(resultSet);
+                    for(OVChipkaart kaart : new OVChipkaartDaoOracleDB().findByReiziger(r)){
+                        r.addOvChipkaart(kaart);
+                    }
                 }
             }
             return ovChipkaarten;
