@@ -1,6 +1,7 @@
 package DP_P3;
 
 import java.sql.Date;
+import java.util.ArrayList;
 
 public class OVChipkaart {
     private int reizigerId;
@@ -9,15 +10,25 @@ public class OVChipkaart {
     private int klasse;
     private double saldo;
     private Reiziger eigenaar;
+    private ArrayList<Product> producten = new ArrayList<>();
+
 
     public OVChipkaart() {}
 
-    public OVChipkaart(int kn, Date gt, int kl, double sal, int id ) {
-        kaartNummer = kn;
-        geldigTot = gt;
-        klasse = kl;
-        saldo = sal;
-        reizigerId = id;
+    public OVChipkaart(int kn, Date gt, int kl, double sal, int reizigerId ) {
+        this.kaartNummer = kn;
+        this.geldigTot = gt;
+        this.klasse = kl;
+        this.saldo = sal;
+        this.reizigerId = reizigerId;
+    }
+
+    public OVChipkaart(int kn, Date gt, int kl, double sal, Reiziger eigenaar) {
+        this.kaartNummer = kn;
+        this.geldigTot = gt;
+        this.klasse = kl;
+        this.saldo = sal;
+        this.eigenaar = eigenaar;
     }
 
     public int getReizigerId() {return reizigerId;}
@@ -36,10 +47,20 @@ public class OVChipkaart {
     public void setSaldo(double s) {saldo = s;}
 
     public Reiziger getEigenaar() { return eigenaar;}
-    public void setEigenaar(Reiziger reiziger) { eigenaar = reiziger;}
+    public void setEigenaar(Reiziger reiziger) { this.eigenaar = reiziger;}
+
+    public ArrayList<Product> getProducten() { return producten; }
+    public void voegProductenToe(ArrayList<Product> producten) {
+        this.producten = producten;
+    }
 
     @Override
     public String toString() {
-        return "   OV-Chipkaart: [ Kaartnummer : " + this.kaartNummer + ", Geldig tot: " + this.geldigTot + ", Saldo: " + this.saldo + ", klasse: " + this.klasse + ", Eigenaar reizigerID: " + this.reizigerId + " ]";
+        String a = "   OV-Chipkaart: [ Kaartnummer : " + this.kaartNummer + ", Geldig tot: " + this.geldigTot + ", Saldo: " + this.saldo + ", klasse: " + this.klasse + ", Eigenaar reizigerID: " + this.reizigerId + " ]";
+        a += "\nProducten [ ";
+        for (Product product : this.producten)
+            a += product.getProductNummer() + " " + product.getProductNaam() + " " + product.getBeschrijving();
+        a += " ]";
+        return a;
     }
 }

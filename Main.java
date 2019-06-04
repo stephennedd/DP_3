@@ -61,10 +61,10 @@ public class Main {
 //        }
 //        System.out.println();
 //
-//        System.out.println("OVChipkaart findAll functie:");
-//        for  (OVChipkaart ovChipkaart : ovChipkaartDaoOracleDB.findAll()) {
-//            System.out.println(ovChipkaart);
-//        }
+        System.out.println("OVChipkaart findAll functie:");
+        for  (OVChipkaart ovChipkaart : ovChipkaartDaoOracleDB.findAll()) {
+            System.out.println(ovChipkaart);
+        }
 //
 //        System.out.println();
 //
@@ -96,10 +96,10 @@ public class Main {
 //            System.out.println(ovChipkaart);
 //        }
 
-        System.out.println("PRODUCT find all functie test");
-        for (Product p : new ProductDaoOracleDB().findAll()) {
-            System.out.println(p);
-        }
+//        System.out.println("PRODUCT find all functie test");
+//        for (Product p : new ProductDaoOracleDB().findAll()) {
+//            System.out.println(p);
+//        }
     }
 }
 

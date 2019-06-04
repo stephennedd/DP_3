@@ -18,7 +18,7 @@ public class ReizigerDaoOracleDB extends OracleBaseDAO implements ReizigerDao {
     }
 
     @Override
-    public List<Reiziger> findAll() {
+    public ArrayList<Reiziger> findAll() {
 
         Connection connection = super.getConnection();
         ArrayList<Reiziger> reizigers = new ArrayList<>();
@@ -58,8 +58,37 @@ public class ReizigerDaoOracleDB extends OracleBaseDAO implements ReizigerDao {
         return null;
     }
 
-    @Override
-    public List<Reiziger> findByGBdatum(Date date) {
+    public Reiziger findByReizigerId(int rId) {
+        Connection connection = getConnection();
+        Reiziger reiziger = new Reiziger();
+
+        try {
+            String query = "SELECT * FROM REIZIGER WHERE REIZIGERID = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, rId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                reiziger.setId(resultSet.getInt("REIZIGEERID"));
+                reiziger.setVoorletters(resultSet.getString("VOORLETTERS"));
+                reiziger.setTussenvoegsel(resultSet.getString("TUSSENVOEGSEL"));
+                reiziger.setAchternaam(resultSet.getString("ACHTERNAAM"));
+                reiziger.setGBdatum(resultSet.getDate("GEBORTEDATUM"));
+
+                List<OVChipkaart> ovChipkaarten = new OVChipkaartDaoOracleDB().findByReiziger(reiziger);
+                for (OVChipkaart ovChipkaart :ovChipkaarten) {
+                    reiziger.addOvChipkaart(ovChipkaart);
+                }
+                return reiziger;
+            }
+        }catch (SQLException e) {
+            System.out.println("REIZIGER DAO FINDBYREIZIGER FAILURE!!");
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public ArrayList<Reiziger> findByGBdatum(Date date) {
 
         Connection connection = getConnection();
         ArrayList<Reiziger> reizigers = new ArrayList<>();
@@ -77,7 +106,7 @@ public class ReizigerDaoOracleDB extends OracleBaseDAO implements ReizigerDao {
                 r.setGBdatum(resultSet.getDate("GEBORTEDATUM"));
                 r.setVoorletters(resultSet.getString("VOORLETTERS"));
 
-                List<OVChipkaart> ovkaarten1 = new OVChipkaartDaoOracleDB().findByReiziger(r);
+                ArrayList<OVChipkaart> ovkaarten1 = new OVChipkaartDaoOracleDB().findByReiziger(r);
                 for (OVChipkaart kaart : ovkaarten1) {
                     r.addOvChipkaart(kaart);
                 }

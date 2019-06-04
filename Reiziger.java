@@ -9,7 +9,7 @@ public class Reiziger {
     private String voorletters;
     private Date gbdatum;
     private int reizigerId;
-    private ArrayList<OVChipkaart> ovChipkaarten;
+    private ArrayList<OVChipkaart> ovChipkaarten = new ArrayList<OVChipkaart>();
 
     public Reiziger(int id, String an, String tv, String vl, Date gbdatum) {
         this.achternaam = an;
@@ -17,12 +17,9 @@ public class Reiziger {
         this.tussenvoegsel = tv;
         this.gbdatum = gbdatum;
         this.reizigerId = id;
-        this.ovChipkaarten = new ArrayList<OVChipkaart>();
     }
 
-    public Reiziger() {
-        this.ovChipkaarten = new ArrayList<OVChipkaart>();
-    }
+    public Reiziger() {}
 
     public int getId() { return reizigerId;}
     public void setId(int id) { this.reizigerId = id;}

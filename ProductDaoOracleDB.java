@@ -15,38 +15,43 @@ public class ProductDaoOracleDB extends OracleBaseDAO implements ProductDao {
         return product;
     }
 
-    @Override
     public ArrayList<Product> findAll() {
 
+        OVChipkaartDaoOracleDB ovChipkaartDaoOracleDB = new OVChipkaartDaoOracleDB();
         Connection connection = super.getConnection();
         ArrayList<Product> producten = new ArrayList<>();
+        ArrayList<OVChipkaart> ovChipkaarten = ovChipkaartDaoOracleDB.findAll();
+
 
         try {
+            for(OVChipkaart ovChipkaart : ovChipkaarten) {
+                System.out.println("Producten op kaart " + ovChipkaart.getKaartNummer() + ";\n");
 
-            Statement statement = connection.createStatement();
-            String query = "SELECT * FROM PRODUCT";
-            ResultSet resultSet = statement.executeQuery(query);
-
-            while (resultSet.next()) {
-                producten.add(toProduct(resultSet));
+                for (Product p : ovChipkaart.getProducten()) {
+                    System.out.println("   ["+ p.getProductNummer() + ", " + p.getProductNaam() + ", " + p.getBeschrijving() + ", $" + p.getPrijs() + ",- ]");
+                    producten.add(p);
+                }
             }
-            return producten;
-        } catch (SQLException e) {
+        } catch (Exception e) {
+            System.out.println("ALERT!! PRODUCTDAO Findall() Failure!!!");
             e.printStackTrace();
         }
         return null;
     }
 
-    @Override
-    public ArrayList<Product> findByProductnummer(int PrNum) {
+    public ArrayList<Product> findByKaart(OVChipkaart ovChipkaart) {
 
-        Connection connection = super.getConnection();
-        ArrayList<Product> producten = new ArrayList<>();
+        Connection conn = super.getConnection();
+        ArrayList<Product> producten = new ArrayList<Product>();
 
         try {
-            String query = "SELECT * FROM PRODUCT WHERE PRODUCTNUMMER = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1, PrNum);
+            String query =  "SELECT p.productnummer, p.productnaam, p.beschrijving, p.prijs" +
+                            "FROM product p, ov_chipkaart ov, ov_chipkaart_product ovp" +
+                            "WHERE ov.kaartnummer = ovp.kaartnummer" +
+                            "AND p.productnummer = ovp.productnummer" +
+                            "AND ov.kaartnummer = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(query);
+            preparedStatement.setInt(1, ovChipkaart.getKaartNummer());
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while(resultSet.next()) {

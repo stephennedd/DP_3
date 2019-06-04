@@ -1,14 +1,13 @@
 package DP_P3;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Product {
     private int productNummer;
     private String productNaam;
     private String beschrijving;
     private double prijs;
-    private List<OVChipkaart> ovChipkaarten = new ArrayList<OVChipkaart>();
+    private ArrayList<OVChipkaart> opOvChipkaarten = new ArrayList<OVChipkaart>();
 
     public Product(int pn, String pnaam, String bv, double pr)  {
         this.productNummer = pn;
@@ -16,8 +15,6 @@ public class Product {
         this.beschrijving = bv;
         this.prijs = pr;
     }
-
-    public Product() {}
 
     public int getProductNummer() {
         return this.productNummer;
@@ -50,15 +47,20 @@ public class Product {
         this.prijs = prijs;
     }
 
-    public List<OVChipkaart> getMijnChipkaarten() { return ovChipkaarten; }
+    public ArrayList<OVChipkaart> getopOvChipkaarten() { return opOvChipkaarten; }
 
-    public void setOvChipkaarten(List<OVChipkaart> ovChipkaarten) {
-        this.ovChipkaarten = ovChipkaarten;
+    public void setOpOvChipkaarten(ArrayList<OVChipkaart> opOvChipkaarten) {
+        this.opOvChipkaarten = opOvChipkaarten;
     }
 
     @Override
     public String toString() {
-        return "    Product [product Nummer= " + productNummer + ", Product Naam = " + productNaam + ", beschrijving = " + beschrijving + ", prijs " + prijs + ", OvChipkaarten : " + ovChipkaarten + "]";
+        String a = "    Product [product Nummer= " + productNummer + ", Product Naam = " + productNaam + ", beschrijving = " + beschrijving + ", prijs " + prijs;
+        a += " OVChipkaarten: ";
+        for (OVChipkaart ovChipkaart : this.opOvChipkaarten){
+            a += ovChipkaart.getKaartNummer() + " " + ovChipkaart.getKlasse();
+        }
+        return a;
     }
 
 
