@@ -2,7 +2,6 @@ package DP_P3;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ReizigerDaoOracleDB extends OracleBaseDAO implements ReizigerDao {
 
@@ -17,7 +16,6 @@ public class ReizigerDaoOracleDB extends OracleBaseDAO implements ReizigerDao {
         return reiziger;
     }
 
-    @Override
     public ArrayList<Reiziger> findAll() {
 
         Connection connection = super.getConnection();
@@ -43,7 +41,7 @@ public class ReizigerDaoOracleDB extends OracleBaseDAO implements ReizigerDao {
                 r.setGBdatum(resultSet.getDate("GEBORTEDATUM"));
 
                 // haal "alle" ovchipkaarten van reiziger op
-                for (OVChipkaart kaart : new OVChipkaartDaoOracleDB().findByReiziger(r)) {
+                for (OVChipkaart kaart : new OVChipkaartDaoOracleDB().findByKaarthouder(r)) {
                     r.addOvChipkaart(kaart);
                 }
 
@@ -75,7 +73,7 @@ public class ReizigerDaoOracleDB extends OracleBaseDAO implements ReizigerDao {
                 reiziger.setAchternaam(resultSet.getString("ACHTERNAAM"));
                 reiziger.setGBdatum(resultSet.getDate("GEBORTEDATUM"));
 
-                List<OVChipkaart> ovChipkaarten = new OVChipkaartDaoOracleDB().findByReiziger(reiziger);
+                ArrayList<OVChipkaart> ovChipkaarten = new OVChipkaartDaoOracleDB().findByKaarthouder(reiziger);
                 for (OVChipkaart ovChipkaart :ovChipkaarten) {
                     reiziger.addOvChipkaart(ovChipkaart);
                 }
@@ -106,7 +104,7 @@ public class ReizigerDaoOracleDB extends OracleBaseDAO implements ReizigerDao {
                 r.setGBdatum(resultSet.getDate("GEBORTEDATUM"));
                 r.setVoorletters(resultSet.getString("VOORLETTERS"));
 
-                ArrayList<OVChipkaart> ovkaarten1 = new OVChipkaartDaoOracleDB().findByReiziger(r);
+                ArrayList<OVChipkaart> ovkaarten1 = new OVChipkaartDaoOracleDB().findByKaarthouder(r);
                 for (OVChipkaart kaart : ovkaarten1) {
                     r.addOvChipkaart(kaart);
                 }
@@ -119,7 +117,6 @@ public class ReizigerDaoOracleDB extends OracleBaseDAO implements ReizigerDao {
         return null;
     }
 
-    @Override
     public Reiziger save(Reiziger reiziger) {
 
         String query = "INSERT INTO reiziger (REIZIGERID, VOORLETTERS, TUSSENVOEGSEL, ACHTERNAAM, GEBORTEDATUM)" + " VALUES (?,?,?,?,?)";
@@ -141,7 +138,6 @@ public class ReizigerDaoOracleDB extends OracleBaseDAO implements ReizigerDao {
 
     }
 
-    @Override
     public Reiziger update(Reiziger reiziger) throws SQLException {
         Connection connection = getConnection();
         String query = "UPDATE REIZIGER SET TUSSENVOEGSEL = ?, ACHTERNAAM = ?, GEBORTEDATUM = ? WHERE REIZIGERID = ?";
@@ -153,7 +149,6 @@ public class ReizigerDaoOracleDB extends OracleBaseDAO implements ReizigerDao {
         return statement.executeUpdate() == 1 ? reiziger : null;
     }
 
-    @Override
     public boolean delete(Reiziger reiziger) throws SQLException {
         Connection connection = getConnection();
         String query = "DELETE FROM REIZIGER WHERE REIZIGERID = ?";

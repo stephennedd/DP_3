@@ -45,10 +45,10 @@ public class ProductDaoOracleDB extends OracleBaseDAO implements ProductDao {
         ArrayList<Product> producten = new ArrayList<Product>();
 
         try {
-            String query =  "SELECT p.productnummer, p.productnaam, p.beschrijving, p.prijs" +
-                            "FROM product p, ov_chipkaart ov, ov_chipkaart_product ovp" +
-                            "WHERE ov.kaartnummer = ovp.kaartnummer" +
-                            "AND p.productnummer = ovp.productnummer" +
+            String query =  "SELECT p.productnummer, p.productnaam, p.beschrijving, p.prijs " +
+                            "FROM product p, ov_chipkaart ov, ov_chipkaart_product ovp " +
+                            "WHERE ov.kaartnummer = ovp.kaartnummer " +
+                            "AND p.productnummer = ovp.productnummer " +
                             "AND ov.kaartnummer = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(query);
             preparedStatement.setInt(1, ovChipkaart.getKaartNummer());

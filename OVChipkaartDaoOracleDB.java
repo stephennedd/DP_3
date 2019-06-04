@@ -16,16 +16,6 @@ public class OVChipkaartDaoOracleDB extends OracleBaseDAO implements OVChipkaart
         return ovChipkaart;
     }
 
-    private Reiziger toReiziger(ResultSet resultSet) throws SQLException {
-        Reiziger reiziger = new Reiziger(
-                resultSet.getInt("REIZIGERID"),
-                resultSet.getString("VOORLETTERS"),
-                resultSet.getString("TUSSENVOEGSEL"),
-                resultSet.getString("ACHTERNAAM"),
-                resultSet.getDate("GEBOORTEDATUM")
-        );
-        return reiziger;
-    }
 
     public ArrayList<OVChipkaart> findAll() {
 
@@ -58,10 +48,10 @@ public class OVChipkaartDaoOracleDB extends OracleBaseDAO implements OVChipkaart
 
         try {
             Connection conn = super.getConnection();
-            String query =  "SELECT ov.kaartnummer, ov.geldigtot, ov.klasse, ov.saldo, ov.reizigerid" +
-                            "FROM product p, ov_chipkaart ov, ov_chipkaart_product ovp" +
-                            "WHERE ov.kaartnummer = ovp.kaartnummer" +
-                            "AND p.productnummer = ovp.productnummer" +
+            String query =  "SELECT ov.kaartnummer, ov.geldigtot, ov.klasse, ov.saldo, ov.reizigerid " +
+                            "FROM product p, ov_chipkaart ov, ov_chipkaart_product ovp " +
+                            "WHERE ov.kaartnummer = ovp.kaartnummer " +
+                            "AND p.productnummer = ovp.productnummer " +
                             "AND p.productnummer = ?";
 
             PreparedStatement preparedStatement = conn.prepareStatement(query);
@@ -96,7 +86,7 @@ public class OVChipkaartDaoOracleDB extends OracleBaseDAO implements OVChipkaart
 
             Connection conn = super.getConnection();
             String query =  "SELECT * FROM ov_chipkaart" +
-                            "WHERE kaartnummer = ?";
+                            " WHERE kaartnummer = ?";
 
             PreparedStatement preparedStatement = conn.prepareStatement(query);
             preparedStatement.setInt(1, kNummer);
@@ -123,7 +113,7 @@ public class OVChipkaartDaoOracleDB extends OracleBaseDAO implements OVChipkaart
 
         try {
             Connection conn = super.getConnection();
-            String query =  "SELECT * FROM ov_chipkaart" +
+            String query =  "SELECT * FROM ov_chipkaart " +
                             "WHERE reizigerid = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(query);
             preparedStatement.setInt(1, kaarthouder.getId());
@@ -176,7 +166,7 @@ public class OVChipkaartDaoOracleDB extends OracleBaseDAO implements OVChipkaart
 
        try {
            String query =   "UPDATE OV_CHIPKAART SET GELDIGTOT = ?, KLASSE = ?, SALDO = ?, REIZIGERID = ?\r\n" +
-                            "WHERE kaartnummer = ?";
+                            " WHERE kaartnummer = ?";
 
            PreparedStatement statement = connection.prepareStatement(query);
            statement.setDate(1, ovChipkaart.getGeldigTot());
