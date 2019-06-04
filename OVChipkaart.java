@@ -56,10 +56,10 @@ public class OVChipkaart {
 
     @Override
     public String toString() {
-        String a = "   OV-Chipkaart: [ Kaartnummer : " + this.kaartNummer + ", Geldig tot: " + this.geldigTot + ", Saldo: " + this.saldo + ", klasse: " + this.klasse + ", reizigerID: " + this.reizigerId + " ]";
-        a += "\nProducten:  \n";
+        String a = " OV-Chipkaart: [ Kaartnummer : " + this.kaartNummer + ", Geldig tot: " + this.geldigTot + ", Saldo: " + this.saldo + ", klasse: " + this.klasse + ", reizigerID: " + this.reizigerId + " ]";
+        a += "\n      Producten:  \n";
         for (Product product : this.producten)
-            a += product.getProductNummer() + " " + product.getProductNaam() + " " + product.getBeschrijving() + "\n";
+            a +="         " + product.getProductNummer() + " " + product.getProductNaam() + " " + product.getBeschrijving() + "\n";
 
 
         return a;
