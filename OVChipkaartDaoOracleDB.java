@@ -200,13 +200,15 @@ public class OVChipkaartDaoOracleDB extends OracleBaseDAO implements OVChipkaart
     }
 
     public OVChipkaart update(OVChipkaart ovChipkaart) {
+
+       ProductDaoOracleDB productDaoOracleDB = new ProductDaoOracleDB();
        Connection connection = super.getConnection();
 
        try {
-           String query =   "UPDATE OV_CHIPKAART SET GELDIGTOT = ?, KLASSE = ?, SALDO = ?, REIZIGERID = ?\r\n" +
+           String query1 =   "UPDATE OV_CHIPKAART SET GELDIGTOT = ?, KLASSE = ?, SALDO = ?, REIZIGERID = ?\r\n" +
                             " WHERE kaartnummer = ?";
 
-           PreparedStatement statement = connection.prepareStatement(query);
+           PreparedStatement statement = connection.prepareStatement(query1);
            statement.setDate(1, ovChipkaart.getGeldigTot());
            statement.setInt(2, ovChipkaart.getKlasse());
            statement.setDouble(3, ovChipkaart.getSaldo());
@@ -216,6 +218,61 @@ public class OVChipkaartDaoOracleDB extends OracleBaseDAO implements OVChipkaart
        catch (SQLException e) {
            System.out.println("ALERT!!! OVCHIPKAARTDAO Update Failure!!");
            e.printStackTrace();
+       }
+       try{
+           Connection connection1 = getConnection();
+           String query2 = "SELECT productnummer FROM ov_chipkaart_product WHERE kaartnummer = ?";
+
+           PreparedStatement preparedStatement = connection1.prepareStatement(query2);
+           preparedStatement.setInt(1, ovChipkaart.getKaartNummer());
+           ResultSet resultSet = preparedStatement.executeQuery();
+
+           ArrayList<Integer> productNummers = new ArrayList<>();
+           ArrayList<Integer> databaseProductnummers = new ArrayList<>();
+
+           if (ovChipkaart != null && ovChipkaart.getProducten() != null) {
+               for (Product product : ovChipkaart.getProducten()) {
+                   if (product != null) {
+                       productNummers.add(product.getProductNummer());
+                   }
+               }
+           }
+
+           while (resultSet.next()) {
+               databaseProductnummers.add(resultSet.getInt(1));
+           }
+
+           Connection connection2 = getConnection();
+           for (int productNummer : productNummers) {
+               if(!databaseProductnummers.contains(productNummer)){
+                   int ovProductId = productDaoOracleDB.GetNewOvProductId();
+
+
+                   String query3 ="INSERT INTO ov_chipkaart_product VALUES (?, ?, ?, 'leeg', ?)"
+                   PreparedStatement preparedStatement1 = connection2.prepareStatement(query3);
+                   preparedStatement1.setInt(1,ovProductId);
+                   preparedStatement1.setInt(2, ovChipkaart.getKaartNummer());
+                   preparedStatement1.setInt(3, productNummer);
+                   java.util.Date date = new java.util.Date();
+                   preparedStatement1.setDate(4, new java.sql.Date(date.getTime()));
+                   preparedStatement.executeQuery();
+               }
+           }
+
+           for (int productNummer : databaseProductnummers) {
+               if (!productNummers.contains(productNummer) && databaseProductnummers.contains(productNummer)) {
+                   Connection connection3 = getConnection();
+                   String query4 = "DELETE FROM ov_chipkaart_product WHERE kaartnummer=? AND productnummer=?";
+                   PreparedStatement preparedStatement1 = connection3.prepareStatement(query4);
+                   preparedStatement1.setInt(1, ovChipkaart.getKaartNummer());
+                   preparedStatement1.setInt(2, productNummer);
+                   preparedStatement1.executeQuery();
+               }
+           }
+       }
+       catch (SQLException e) {
+           e.printStackTrace();
+           System.out.println("Update OVCHIPKAARTDAO fail");
        }
        return ovChipkaart;
     }

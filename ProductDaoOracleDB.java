@@ -122,4 +122,27 @@ public class ProductDaoOracleDB extends OracleBaseDAO implements ProductDao {
         }
         return false;
     }
+
+    public int GetNewOvProductId() {
+        System.out.println("Getting new Ov Product Id...");
+        Connection connection = getConnection();
+        int newId = 0;
+        try {
+            String query = "SELECT ovproductid FROM ov_chipkaart_product";
+            PreparedStatement ps = getConnection().prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+
+
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                if (id > newId) newId = id;
+            }
+        } catch (Exception e)
+        { System.out.println("ProductOracleDaoImpl/GetNewOvProductId()/rs.next() Failed: " + e.getMessage()); }
+
+        newId++;
+
+        return newId;
+
+    }
 }
