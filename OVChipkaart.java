@@ -15,7 +15,7 @@ public class OVChipkaart {
 
     public OVChipkaart() {}
 
-    public OVChipkaart(int kn, Date gt, int kl, double sal, int reizigerId ) {
+    public OVChipkaart(int kn, Date gt, int kl, double sal, int reizigerId) {
         this.kaartNummer = kn;
         this.geldigTot = gt;
         this.klasse = kl;
@@ -50,9 +50,11 @@ public class OVChipkaart {
     public void setEigenaar(Reiziger reiziger) { this.eigenaar = reiziger;}
 
     public ArrayList<Product> getProducten() { return producten; }
-    public void voegProductenToe(ArrayList<Product> producten) {
+    public void setProducten(ArrayList<Product> producten) {
         this.producten = producten;
     }
+    public void voegProductToe(Product product) { this.producten.add(product); }
+    public void verwijderProduct(Product product) { this.producten.remove(product); }
 
     @Override
     public String toString() {

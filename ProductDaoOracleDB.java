@@ -25,13 +25,15 @@ public class ProductDaoOracleDB extends OracleBaseDAO implements ProductDao {
 
         try {
             for(OVChipkaart ovChipkaart : ovChipkaarten) {
-                System.out.println("Producten op kaart " + ovChipkaart.getKaartNummer() + ";\n");
+                System.out.println("Producten op kaart " + ovChipkaart.getKaartNummer() + ";");
 
                 for (Product p : ovChipkaart.getProducten()) {
                     System.out.println("   ["+ p.getProductNummer() + ", " + p.getProductNaam() + ", " + p.getBeschrijving() + ", $" + p.getPrijs() + ",- ]");
                     producten.add(p);
                 }
+                System.out.println();
             }
+
         } catch (Exception e) {
             System.out.println("ALERT!! PRODUCTDAO Findall() Failure!!!");
             e.printStackTrace();

@@ -8,6 +8,8 @@ public interface OVChipkaartDao {
     public ArrayList<OVChipkaart> findAll() throws SQLException;
     public ArrayList<OVChipkaart> findByProduct(Product product) throws SQLException;
     public OVChipkaart findByKaartnummer(int kNummer) throws SQLException;
+    public void voegProductToeAanKaart(int prodId, OVChipkaart ov, Product p) throws SQLException;
+    public boolean verwijderProductVanKaart(OVChipkaart ov, Product p) throws SQLException;
     public ArrayList<OVChipkaart> findByKaarthouder(Reiziger kaartHouder) throws SQLException;
     public OVChipkaart update(OVChipkaart ovChipkaart) throws SQLException;
     public boolean delete(OVChipkaart ovChipkaart) throws Exception;

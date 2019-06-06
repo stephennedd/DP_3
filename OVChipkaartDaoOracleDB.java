@@ -1,5 +1,6 @@
 package DP_P3;
 
+
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -28,7 +29,7 @@ public class OVChipkaartDaoOracleDB extends OracleBaseDAO implements OVChipkaart
         try {
             for (Reiziger r : reizigers) {
                 for(OVChipkaart ov : r.getOvChipkaarten()) {
-                    ov.voegProductenToe(productDaoOracleDB.findByKaart(ov));
+                    ov.setProducten(productDaoOracleDB.findByKaart(ov));
                     ovChipkaarten.add(ov);
                 }
             }
@@ -137,6 +138,43 @@ public class OVChipkaartDaoOracleDB extends OracleBaseDAO implements OVChipkaart
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void voegProductToeAanKaart(int prodId, OVChipkaart ov, Product p) {
+        try{
+            Connection connection = getConnection();
+
+            String query = "INSERT INTO ov_chipkaart_product VALUES(?,?,?,?,CURRENT_DATE)";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1,prodId);
+            preparedStatement.setInt(2,ov.getKaartNummer());
+            preparedStatement.setInt(3,p.getProductNummer());
+            preparedStatement.setString(4,"actief");
+            preparedStatement.executeUpdate();
+
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("FAILURE voegProductToe()!!");
+        }
+    }
+
+    public boolean verwijderProductVanKaart(OVChipkaart ov, Product p) {
+        try{
+            Connection connection = getConnection();
+            String query = "DELETE FROM ov_chipkaart_product WHERE kaartnummer = ? AND productnummer = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1,ov.getKaartNummer());
+            preparedStatement.setInt(2, p.getProductNummer());
+            preparedStatement.executeUpdate();
+
+            return true;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("verwijderProduct() FAILURE!!");
+            return false;
+        }
     }
 
     public OVChipkaart save(OVChipkaart ovChipkaart) {
